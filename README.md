@@ -52,16 +52,16 @@ Este paquete proporciona una solución de **internacionalización (i18n)** compl
 
 ### 1. Instalación en modo desarrollo/editable (local)
 ```bash
-pip install -e "D:/Proyectos/PKG-i18n"
+pip install -e "/path/to/pkg-i18n"
 ```
 
 ### 2. En `requirements.txt` de tu proyecto
 ```text
 # Enlace editable local durante desarrollo:
--e D:/Proyectos/PKG-i18n
+-e /path/to/pkg-i18n
 
-# O enlace directo por repositorio Git/Bitbucket:
-# pkg-i18n @ git+https://bitbucket.org/pkg/i18n.git
+# O enlace directo por repositorio GitHub:
+# pkg-i18n @ git+https://github.com/borispinto/pkg-i18n.git
 ```
 
 ### 3. En `pyproject.toml` de tu proyecto
