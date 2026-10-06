@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pkg-i18n"
+version = "1.0.0"
+description = "Motor modular de internacionalización (i18n)"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "Boris Pinto", email = "borispinto@asisnet.net" }
+]
+maintainers = [
+    { name = "Asisnet Computacion, CA", email = "proyectos@asisnet.net" }
+]
+keywords = [
+    "i18n",
+    "localization",
+    "l10n",
+    "translation",
+    "multilingual",
+    "internacionalizacion",
+    "traduccion",
+    "multilingue",
+    "asisnet"
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/borispinto/pkg-i18n"
+Repository = "https://github.com/borispinto/pkg-i18n"
+Issues = "https://github.com/borispinto/pkg-i18n/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["i18n*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json"]
