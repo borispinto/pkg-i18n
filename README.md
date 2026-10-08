@@ -17,15 +17,16 @@ Este paquete proporciona una solución de **internacionalización (i18n)** compl
 2. [Instalación del Paquete](#-instalación-del-paquete)
 3. [Estructura del Proyecto y Formato de Archivos JSON](#-estructura-del-proyecto-y-formato-de-archivos-json)
 4. [Arquitectura de Carga en Cascada (7 Capas)](#-arquitectura-de-carga-en-cascada-7-capas)
-5. [Instructivo de Integración e Importación en Python](#-instructivo-de-integración-e-importación-en-python)
-6. [Uso del Motor en Python (`t18n`)](#-uso-del-motor-en-python-t18n)
+5. [Uso del Motor en Python (`t18n`)](#-uso-del-motor-en-python-t18n)
+6. [Instructivo de Integración e Importación en Python](#-instructivo-de-integración-e-importación-en-python)
 7. [Suscripción a Cambios en Tiempo Real (Patrón Observador)](#-suscripción-a-cambios-en-tiempo-real-patrón-observador)
 8. [Gestión y Listado de Idiomas Disponibles](#-gestión-y-listado-de-idiomas-disponibles)
-9. [Herramientas de Desarrollo y Traducción Automática](#-herramientas-de-desarrollo-y-traducción-automática)
+9. [Exportar Diccionario Activo (`export_active_dictionary`)](#-exportar-diccionario-activo-export_active_dictionary)
+10. [Herramientas de Desarrollo y Traducción Automática](#-herramientas-de-desarrollo-y-traducción-automática)
    - [Extractor de Idioma Base (`extract_base_language`)](#extractor-de-idioma-base-extract_base_language)
    - [Sincronización y Traducción (`prepare_new_language`)](#sincronización-y-traducción-prepare_new_language)
-10. [Soporte para Empaquetado con PyInstaller](#-soporte-para-empaquetado-con-pyinstaller)
-11. [Integración con Otros Lenguajes (VB.NET y Ecosistema .NET)](#-integración-con-otros-lenguajes-vbnet-y-ecosistema-net)
+11. [Soporte para Empaquetado con PyInstaller](#-soporte-para-empaquetado-con-pyinstaller)
+12. [Integración con Otros Lenguajes (VB.NET y Ecosistema .NET)](#-integración-con-otros-lenguajes-vbnet-y-ecosistema-net)
     - [Método 1: Catálogos JSON Compartidos y Herramientas CLI (Recomendado)](#método-1-catálogos-json-compartidos-y-herramientas-cli-recomendado)
     - [Método 2: Interoperabilidad en Tiempo de Ejecución con Python.NET (`pythonnet`)](#método-2-interoperabilidad-en-tiempo-de-ejecución-con-pythonnet-pythonnet)
     - [Método 3: Invocación por Subproceso / CLI o Microservicio Local](#método-3-invocación-por-subproceso--cli-o-microservicio-local)
@@ -133,34 +134,7 @@ El gestor `I18nManager` resuelve las traducciones evaluando 7 capas en orden jer
 | **Capa 4** | Externo `{lang_base}.json` | Archivo base externo (ej. `pt.json` de usuario) |
 | **Capa 5** | Interno `{lang_regional}.json` | Idioma regional solicitado (ej. `pt-BR.json`) |
 | **Capa 6** | Externo `{lang_regional}.json` | Archivo regional externo (ej. `pt-BR.json` de usuario) |
-
----
-
-## 🛠️ Instructivo de Integración e Importación en Python
-
-Una vez instalado el paquete, no necesitas configurar rutas de `sys.path`. Importa los símbolos directamente desde `i18n`:
-
-```python
-from i18n import get_i18n_instance, t18n, I18nManager, resolve_languages_directory
-
-# 1. Obtener la instancia singleton de i18n (detecta resources/languages por defecto).
-
-i18n = get_i18n_instance(default_lang={"es": "Español"})
-
-# 2. (Opcional) Resolver la ruta canónica o personalizar carpetas de idiomas:
-# ruta_idiomas = resolve_languages_directory()  # Retorna Path a resources/languages
-# Se puede especificar una carpeta alternativa con set_external_languages_dir().
-# i18n.set_internal_languages_dir("ruta/personalizada/resources/languages")
-# i18n.set_external_languages_dir("ruta/usuario/resources/languages")
-
-# 3. (Opcional) Registrar traducciones de respaldo desde código (Capa 0):
-i18n.register_defaults({
-    "btn_open": "Abrir Archivo",
-    "modulo1": {
-        "sec1": {"valor_clave": "Respaldo Interno"}
-    }
-})
-```
+| 🟡 **Capa Fallback** | Interno `t18n('clave', 'texto')` | Aplica para detectar inconsistencia del diccionario definido (red de seguridad final en tiempo de ejecución) |
 
 ---
 
@@ -191,6 +165,34 @@ from i18n import get_i18n_instance
 i18n = get_i18n_instance()
 if "btn_open" in i18n:
     print(i18n["btn_open"])
+```
+
+---
+
+## 🛠️ Instructivo de Integración e Importación en Python
+
+Una vez instalado el paquete, no necesitas configurar rutas de `sys.path`. Importa los símbolos directamente desde `i18n`:
+
+```python
+from i18n import get_i18n_instance, t18n, I18nManager, resolve_languages_directory
+
+# 1. Obtener la instancia singleton de i18n (detecta resources/languages por defecto).
+
+i18n = get_i18n_instance(default_lang={"es": "Español"})
+
+# 2. (Opcional) Resolver la ruta canónica o personalizar carpetas de idiomas:
+# ruta_idiomas = resolve_languages_directory()  # Retorna Path a resources/languages
+# Se puede especificar una carpeta alternativa con set_external_languages_dir().
+# i18n.set_internal_languages_dir("ruta/personalizada/resources/languages")
+# i18n.set_external_languages_dir("ruta/usuario/resources/languages")
+
+# 3. (Opcional) Registrar traducciones de respaldo desde código (Capa 0):
+i18n.register_defaults({
+    "btn_open": "Abrir Archivo",
+    "modulo1": {
+        "sec1": {"valor_clave": "Respaldo Interno"}
+    }
+})
 ```
 
 ---

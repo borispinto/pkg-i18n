@@ -49,7 +49,7 @@ htmlcov/
 # Documentos de soporte
 chat_historico/
 Doc_inicial
-VS i18n.bat
+VS*.bat
 
 # Tipado y linters
 .mypy_cache/

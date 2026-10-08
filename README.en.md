@@ -17,8 +17,8 @@ This package delivers a comprehensive, centralized, extensible, high-performance
 2. [Installation](#-installation)
 3. [Project Structure & JSON Catalog Format](#-project-structure--json-catalog-format)
 4. [7-Layer Cascade Loading Architecture](#-7-layer-cascade-loading-architecture)
-5. [Python Integration & Import Guide](#-python-integration--import-guide)
-6. [Using the Engine in Python (`t18n`)](#-using-the-engine-in-python-t18n)
+5. [Using the Engine in Python (`t18n`)](#-using-the-engine-in-python-t18n)
+6. [Python Integration & Import Guide](#-python-integration--import-guide)
 7. [Real-time Language Subscription (Observer Pattern)](#-real-time-language-subscription-observer-pattern)
 8. [Available Languages Discovery & Management](#-available-languages-discovery--management)
 9. [Export Active Dictionary (`export_active_dictionary`)](#-export-active-dictionary-export_active_dictionary)
@@ -134,29 +134,7 @@ Reserved root keys prefixed with `_`:
 | **Layer 4** | External `{lang_base}.json` | External base language catalog (e.g., user-provided `pt.json`) |
 | **Layer 5** | Bundled `{lang_regional}.json` | Requested regional variant catalog (e.g., `pt-BR.json`) |
 | **Layer 6** | External `{lang_regional}.json` | External regional variant catalog (e.g., user-provided `pt-BR.json`) |
-
----
-
-## 🛠️ Python Integration & Import Guide
-
-```python
-from i18n import get_i18n_instance, t18n, I18nManager, resolve_languages_directory
-
-# 1. Obtain singleton instance (auto-discovers resources/languages by default)
-i18n = get_i18n_instance(default_lang={"es": "Español"})
-
-# 2. (Optional) Customizing internal or external directory paths:
-# i18n.set_internal_languages_dir("custom/path/resources/languages")
-# i18n.set_external_languages_dir("user/override/resources/languages")
-
-# 3. (Optional) Register code-level fallback defaults (Layer 0):
-i18n.register_defaults({
-    "btn_open": "Open File",
-    "module1": {
-        "sec1": {"key_value": "Internal Fallback"}
-    }
-})
-```
+| 🟡 **Fallback Layer** | In-code `t18n('key', 'default_text')` | Detects catalog inconsistencies & acts as final fail-safe runtime safety net |
 
 ---
 
@@ -183,6 +161,29 @@ from i18n import get_i18n_instance
 i18n = get_i18n_instance()
 if "btn_open" in i18n:
     print(i18n["btn_open"])
+```
+
+---
+
+## 🛠️ Python Integration & Import Guide
+
+```python
+from i18n import get_i18n_instance, t18n, I18nManager, resolve_languages_directory
+
+# 1. Obtain singleton instance (auto-discovers resources/languages by default)
+i18n = get_i18n_instance(default_lang={"es": "Español"})
+
+# 2. (Optional) Customizing internal or external directory paths:
+# i18n.set_internal_languages_dir("custom/path/resources/languages")
+# i18n.set_external_languages_dir("user/override/resources/languages")
+
+# 3. (Optional) Register code-level fallback defaults (Layer 0):
+i18n.register_defaults({
+    "btn_open": "Open File",
+    "module1": {
+        "sec1": {"key_value": "Internal Fallback"}
+    }
+})
 ```
 
 ---
