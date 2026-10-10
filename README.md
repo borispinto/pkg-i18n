@@ -16,7 +16,7 @@ Este paquete proporciona una solución de **internacionalización (i18n)** compl
 1. [Características Principales](#-características-principales)
 2. [Instalación del Paquete](#-instalación-del-paquete)
 3. [Estructura del Proyecto y Formato de Archivos JSON](#-estructura-del-proyecto-y-formato-de-archivos-json)
-4. [Arquitectura de Carga en Cascada (7 Capas)](#-arquitectura-de-carga-en-cascada-7-capas)
+4. [Arquitectura de Carga en Cascada (7 Capas) + Contingencia](#-arquitectura-de-carga-en-cascada-7-capas)
 5. [Uso del Motor en Python (`t18n`)](#-uso-del-motor-en-python-t18n)
 6. [Instructivo de Integración e Importación en Python](#-instructivo-de-integración-e-importación-en-python)
 7. [Suscripción a Cambios en Tiempo Real (Patrón Observador)](#-suscripción-a-cambios-en-tiempo-real-patrón-observador)
@@ -121,20 +121,20 @@ El ordenamiento estándar ubica primero `_language_name`, luego `_default`, y a 
 
 ---
 
-## 🏗️ Arquitectura de Carga en Cascada (7 Capas)
+## 🏗️ Arquitectura de Carga en Cascada (7 Capas) + Contingencia
 
 El gestor `I18nManager` resuelve las traducciones evaluando 7 capas en orden jerárquico ascendente (cada capa superior sobreescribe a las anteriores):
 
 | Capa | Origen | Descripción |
 | :--- | :--- | :--- |
-| **Capa 0** | Código Python | Respaldos registrados dinámicamente con `register_defaults()` |
-| **Capa 1** | Interno `es.json` | Idioma base empaquetado por defecto en la aplicación |
-| **Capa 2** | Externo `es.json` | Archivo base en directorio externo editable por el usuario |
-| **Capa 3** | Interno `{lang_base}.json` | Idioma base solicitado (ej. `pt.json`) |
-| **Capa 4** | Externo `{lang_base}.json` | Archivo base externo (ej. `pt.json` de usuario) |
-| **Capa 5** | Interno `{lang_regional}.json` | Idioma regional solicitado (ej. `pt-BR.json`) |
-| **Capa 6** | Externo `{lang_regional}.json` | Archivo regional externo (ej. `pt-BR.json` de usuario) |
-| 🟡 **Capa Fallback** | Interno `t18n('clave', 'texto')` | Aplica para detectar inconsistencia del diccionario definido (red de seguridad final en tiempo de ejecución) |
+| **0** | Código Python | Diccionario base en código, se carga con `register_defaults()` |
+| **1** | Interno `es.json` | Idioma base empaquetado por defecto en la aplicación |
+| **2** | Externo `es.json` | Archivo base en directorio externo editable por el usuario |
+| **3** | Interno `{lang_base}.json` | Idioma base solicitado (ej. `pt.json`) |
+| **4** | Externo `{lang_base}.json` | Archivo base externo (ej. `pt.json` de usuario) |
+| **5** | Interno `{lang_regional}.json` | Idioma regional solicitado (ej. `pt-BR.json`) |
+| **6** | Externo `{lang_regional}.json` | Archivo regional externo (ej. `pt-BR.json` de usuario) |
+| 🟡 **Contingencia** | Interno `t18n('clave', 'texto')` | Aplica para detectar inconsistencia del diccionario definido (red de seguridad final en tiempo de ejecución) |
 
 ---
 
@@ -186,13 +186,40 @@ i18n = get_i18n_instance(default_lang={"es": "Español"})
 # i18n.set_internal_languages_dir("ruta/personalizada/resources/languages")
 # i18n.set_external_languages_dir("ruta/usuario/resources/languages")
 
-# 3. (Opcional) Registrar traducciones de respaldo desde código (Capa 0):
+# 3. (Opcional) Registrar Diccionario base en código (Capa 0) estapa de desarrollo se puede alimentar con el resultado de la herramienta extract_base_language():
+```
 i18n.register_defaults({
-    "btn_open": "Abrir Archivo",
-    "modulo1": {
-        "sec1": {"valor_clave": "Respaldo Interno"}
+        "_language_name": "Español",
+        "_default": {
+            "btn_accept": "Aceptar",
+            "btn_close": "Cerrar",
+            "btn_continue": "Continuar"
+        },
+        "modulo1": {
+            "clave_1": "Texto de la clave 1 del modulo1.",
+            "clave_2": "Texto de la clave 2 del modulo1.",
+        }
+    })
+```
+ó 
+```
+i18n_inst.register_defaults(get_default_translations_dict())
+
+def get_default_translations_dict():
+    """Retorna un diccionario completo con todas las claves e idioma base (es) de la aplicación."""
+    data = {
+        "_language_name": "Español",
+        "_default": {
+            "btn_accept": "Aceptar",
+            "btn_close": "Cerrar",
+            "btn_continue": "Continuar"
+        },
+        "modulo1": {
+            "clave_1": "Texto de la clave 1 del modulo1.",
+            "clave_2": "Texto de la clave 2 del modulo1.",
+        }
     }
-})
+    return data
 ```
 
 ---

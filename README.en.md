@@ -16,7 +16,7 @@ This package delivers a comprehensive, centralized, extensible, high-performance
 1. [Key Features](#-key-features)
 2. [Installation](#-installation)
 3. [Project Structure & JSON Catalog Format](#-project-structure--json-catalog-format)
-4. [7-Layer Cascade Loading Architecture](#-7-layer-cascade-loading-architecture)
+4. [7-Layer Cascade Loading Architecture + Fallback](#-7-layer-cascade-loading-architecture)
 5. [Using the Engine in Python (`t18n`)](#-using-the-engine-in-python-t18n)
 6. [Python Integration & Import Guide](#-python-integration--import-guide)
 7. [Real-time Language Subscription (Observer Pattern)](#-real-time-language-subscription-observer-pattern)
@@ -121,20 +121,20 @@ Reserved root keys prefixed with `_`:
 
 ---
 
-## 🏗️ 7-Layer Cascade Loading Architecture
+## 🏗️ 7-Layer Cascade Loading Architecture + Fallback
 
 `I18nManager` resolves translations by evaluating 7 hierarchical layers in ascending priority order (higher layers override lower layers):
 
 | Layer | Source | Description |
 | :--- | :--- | :--- |
-| **Layer 0** | Python Code | Dynamic in-memory defaults registered via `register_defaults()` |
-| **Layer 1** | Bundled `es.json` | Default baseline locale packaged inside the application |
-| **Layer 2** | External `es.json` | Baseline catalog in user-editable external directory |
-| **Layer 3** | Bundled `{lang_base}.json` | Requested base language catalog (e.g., `pt.json`) |
-| **Layer 4** | External `{lang_base}.json` | External base language catalog (e.g., user-provided `pt.json`) |
-| **Layer 5** | Bundled `{lang_regional}.json` | Requested regional variant catalog (e.g., `pt-BR.json`) |
-| **Layer 6** | External `{lang_regional}.json` | External regional variant catalog (e.g., user-provided `pt-BR.json`) |
-| 🟡 **Fallback Layer** | In-code `t18n('key', 'default_text')` | Detects catalog inconsistencies & acts as final fail-safe runtime safety net |
+| **0** | Python Code | Dynamic in-memory defaults registered via `register_defaults()` |
+| **1** | Bundled `es.json` | Default baseline locale packaged inside the application |
+| **2** | External `es.json` | Baseline catalog in user-editable external directory |
+| **3** | Bundled `{lang_base}.json` | Requested base language catalog (e.g., `pt.json`) |
+| **4** | External `{lang_base}.json` | External base language catalog (e.g., user-provided `pt.json`) |
+| **5** | Bundled `{lang_regional}.json` | Requested regional variant catalog (e.g., `pt-BR.json`) |
+| **6** | External `{lang_regional}.json` | External regional variant catalog (e.g., user-provided `pt-BR.json`) |
+| 🟡 **Fallback** | In-code `t18n('key', 'default_text')` | Detects catalog inconsistencies & acts as final fail-safe runtime safety net |
 
 ---
 
