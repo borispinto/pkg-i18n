@@ -1,0 +1,15 @@
+# ==============================================================================
+# Requisitos del módulo i18n
+# ==============================================================================
+# El núcleo del módulo i18n (I18nManager, extractor y sincronizador sin traducción)
+# funciona exclusivamente con la biblioteca estándar de Python (sin dependencias obligatorias).
+#
+# Las siguientes librerías son OPCIONALES y solo se requieren si se desea utilizar
+# las funciones de traducción automática en 'src/i18n/translator.py' y 'prepare_new_language()':
+
+# Traducción automática en línea (Google Translate)
+deep-translator>=1.11.4
+
+# Traducción automática 100% offline (Argos Translate - NMT local)
+# Descomentar si se utilizará el motor 'argos' sin conexión a Internet:
+# argostranslate>=1.11.0

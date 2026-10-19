@@ -1,0 +1,72 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 ASISNET Computación, CA <proyectos@asisnet.net>
+# SPDX-FileCopyrightText: 2026 Boris Pinto <borispinto@gmail.com>
+# Autor: Boris Pinto <borispinto@gmail.com>
+# File: pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pkg-i18n"
+version = "1.0.0"
+description = "Motor modular de internacionalización (i18n) de alto rendimiento"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+
+# 1. Tu marca personal como Autor Principal
+authors = [
+    { name = "Boris Pinto", email = "borispinto@gmail.com" }
+]
+
+# 2. Tu empresa como el canal oficial de Soporte y Negocios
+maintainers = [
+    { name = "ASISNET Computación, CA", email = "proyectos@asisnet.net" }
+]
+
+keywords = [
+    "i18n",
+    "localization",
+    "l10n",
+    "translation",
+    "multilingual",
+    "internacionalizacion",
+    "traduccion",
+    "multilingue",
+    "asisnet"
+]
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Internationalization",
+    "Topic :: Software Development :: Localization"
+]
+
+dependencies = []
+
+[project.urls]
+Homepage = "https://www.asisnet.net"
+Repository = "https://github.com/borispinto/pkg-i18n"
+Issues = "https://github.com/borispinto/pkg-i18n/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["i18n*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json"]
+
